@@ -33,3 +33,8 @@ for snap_file in tqdm(snap_files):
             del hf[f"{PartType}/ParticleIDGenerationNumber"]
 
             hf.create_dataset(f"{PartType}/ParticleIDs", data=new_IDs, chunks=True)
+
+# How to invert the mapping
+
+original_ParticleIDs = (new_ids >> 32).astype(np.uint32) # right-shift by 32-bits
+original_ChildIDs = (new_ids & 0xFFFFFFFF).astype(np.uint32) # that is the hex for (2^32 - 1); The AND picks out the last 32 bits.
